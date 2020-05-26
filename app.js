@@ -48,19 +48,45 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     //selecting random terminoes
-    const randomS = Math.floor(Math.random() *theTerominoes.length)
-    let current = theTerominoes[randomS][randomS];
-    console.log(theTerominoes)
+    let randomS = Math.floor(Math.random() *theTerominoes.length)
+    let current = theTerominoes[randomS][0];
 
 
 
-    //drawing terminoes 
-    
+    //drawing tetrominoes 
     function draw() {
         current.forEach( index => {
-            squares[currentPosition + index].classList.add("teromino")
+            squares[currentPosition + index].classList.add("tetromino")
         })
     }
     
     draw()
+
+    function undraw() {
+        current.forEach( index => {
+            squares[currentPosition + index].classList.remove("tetromino")
+        })
+    } 
+    
+    //moving tetrominoes down
+    timerId = setInterval(moveDown, 100)
+
+    function moveDown () {
+        undraw()
+        currentPosition += width
+        draw()
+        freeze()
+    }
+
+    //freeze tetrominoes
+    function freeze() {
+        if (current.some (index => squares[currentPosition + index + width].classList.contains("taken"))) {
+            current.forEach(index => squares[currentPosition + index].classList.add("taken"))
+            randomS = Math.floor(Math.random() *theTerominoes.length)
+            current = theTerominoes[randomS][0]
+            currentPosition = 4
+            draw()
+        }
+    }
 })
+

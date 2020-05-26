@@ -24,7 +24,7 @@ body {
     width: 20px;
 }
 
-.teromino {
+.tetromino {
     background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/New_York_Mets.svg/1200px-New_York_Mets.svg.png");
     background-size: 50%;
 }
