@@ -48,8 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     //selecting random terminoes
+    let currentRotation = 0
     let randomS = Math.floor(Math.random() *theTerominoes.length)
-    let current = theTerominoes[randomS][0];
+    let current = theTerominoes[randomS][currentRotation];
 
 
 
@@ -67,9 +68,29 @@ document.addEventListener("DOMContentLoaded", () => {
             squares[currentPosition + index].classList.remove("tetromino")
         })
     } 
+
+    //keycodes to functions 
+    function control(e) {
+        if (e.keyCode === 37) {
+            moveLeft()
+        }
+        if (e.keyCode === 39) {
+            moveRight()
+        }
+        if (e.keyCode === 40) {
+            fallFast()
+        }
+        if (e.keyCode === 38){
+            rotate()
+        }
+    }
     
+    document.addEventListener("keyup", control)
+
     //moving tetrominoes down
-    timerId = setInterval(moveDown, 100)
+    let speed = 1000
+    
+    timerId = setInterval(moveDown, speed)
 
     function moveDown () {
         undraw()
@@ -88,5 +109,46 @@ document.addEventListener("DOMContentLoaded", () => {
             draw()
         }
     }
-})
 
+    //moving tetrominoes left and right
+    function moveLeft () {
+        undraw()
+        const leftEdge = current.some(index => (currentPosition + index) % width === 0)
+        
+        if(!leftEdge) currentPosition -=1
+        
+        if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+            currentPosition +=1
+        }
+        draw()
+}
+
+    function moveRight() {
+        undraw()
+        const rightEdge = current.some(index => (currentPosition + index) % width === width -1)
+        
+        if(!rightEdge) currentPosition +=1
+        
+        if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+            currentPosition -=1
+        }
+        draw() 
+    }
+
+    //rotate tetrominoes
+
+    function rotate() {
+        undraw()
+        currentRotation ++
+        if (currentRotation === current.length) {
+            currentRotation = 0
+        }
+        current = theTerominoes[randomS][currentRotation]
+        draw()
+    }
+
+    //speed up falling 
+    function fallFast() {
+        speed -= 100
+    }
+})
